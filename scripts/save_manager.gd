@@ -1,21 +1,57 @@
 extends Node
 
 const SAVE_PATH := "user://career_save.json"
-const SAVE_VERSION := 2
+const SAVE_VERSION := 3
 
 var current_player: PlayerData
+var career_time: CareerTime = CareerTime.new()
+
+
+func begin_new_career() -> bool:
+	if current_player == null or not current_player.is_valid():
+		return false
+	career_time = CareerTime.new()
+	if not career_time.initialize_new_career(current_player.age):
+		return false
+	var birth_date := CareerTime.get_birth_date_for_age(career_time.start_date, current_player.age)
+	return current_player.set_birth_date(birth_date)
+
+
+func sync_player_age_with_career_time() -> bool:
+	if current_player == null or not current_player.has_birth_date() or not career_time.is_initialized():
+		return false
+	var calculated_age := CareerTime.calculate_age_on_date(career_time.current_date, current_player.get_birth_date())
+	if calculated_age < PlayerData.MIN_CREATION_AGE or calculated_age > PlayerData.MAX_CAREER_AGE:
+		return false
+	current_player.age = calculated_age
+	return true
 
 
 func save_game() -> bool:
-	if current_player == null or not current_player.is_valid():
+	if current_player == null:
+		push_error("Cannot save invalid player data.")
+		return false
+	if not career_time.is_initialized():
+		career_time = CareerTime.new()
+		if not career_time.initialize_new_career(current_player.age):
+			return false
+	if not current_player.has_birth_date():
+		var birth_date := CareerTime.get_birth_date_for_age(career_time.start_date, current_player.age)
+		if not current_player.set_birth_date(birth_date):
+			return false
+	if not sync_player_age_with_career_time() or not current_player.is_valid():
 		push_error("Cannot save invalid player data.")
 		return false
 
 	var save_data := {
 		"game_version": SAVE_VERSION,
+		"career_time": career_time.to_save_data(),
 		"player": {
 			"name": current_player.player_name,
 			"age": current_player.age,
+			"birth_year": current_player.birth_year,
+			"birth_month": current_player.birth_month,
+			"birth_day": current_player.birth_day,
 			"nationality": current_player.nationality,
 			"height_cm": current_player.height_cm,
 			"weight_kg": current_player.weight_kg,
@@ -74,6 +110,9 @@ func load_game() -> bool:
 	var loaded_player := PlayerData.new()
 	loaded_player.player_name = saved_player["name"]
 	loaded_player.age = int(saved_player["age"])
+	loaded_player.birth_year = int(saved_player["birth_year"])
+	loaded_player.birth_month = int(saved_player["birth_month"])
+	loaded_player.birth_day = int(saved_player["birth_day"])
 	loaded_player.nationality = saved_player["nationality"]
 	loaded_player.height_cm = int(saved_player["height_cm"])
 	loaded_player.weight_kg = int(saved_player["weight_kg"])
@@ -96,7 +135,22 @@ func load_game() -> bool:
 	if not loaded_player.is_valid():
 		return false
 
+	var loaded_career_time := CareerTime.new()
+	var saved_career_time: Variant = migrated_data.get("career_time")
+	if typeof(saved_career_time) != TYPE_DICTIONARY:
+		return false
+	if not loaded_career_time.restore_from_data(saved_career_time):
+		return false
+	var loaded_age := CareerTime.calculate_age_on_date(
+		loaded_career_time.current_date,
+		loaded_player.get_birth_date()
+	)
+	if loaded_age < PlayerData.MIN_CREATION_AGE or loaded_age > PlayerData.MAX_CAREER_AGE:
+		return false
+	loaded_player.age = loaded_age
+
 	current_player = loaded_player
+	career_time = loaded_career_time
 	return true
 
 
@@ -115,14 +169,32 @@ func _migrate_save_data(data: Dictionary) -> Dictionary:
 			return {}
 		saved_player["potential_min"] = 50
 		saved_player["potential_max"] = 70
-		migrated_data["game_version"] = SAVE_VERSION
+
+	if version_number <= 2:
+		var saved_player: Variant = migrated_data.get("player")
+		if typeof(saved_player) != TYPE_DICTIONARY or not _is_integer_value(saved_player.get("age")):
+			return {}
+		var legacy_age := int(saved_player["age"])
+		var birth_date := CareerTime.get_birth_date_for_age(CareerTime.DEFAULT_START_DATE, legacy_age)
+		if birth_date.is_empty():
+			return {}
+		saved_player["birth_year"] = birth_date["year"]
+		saved_player["birth_month"] = birth_date["month"]
+		saved_player["birth_day"] = birth_date["day"]
+		var default_career_time := CareerTime.new()
+		if not default_career_time.initialize_new_career(legacy_age):
+			return {}
+		migrated_data["career_time"] = default_career_time.to_save_data()
+
+	migrated_data["game_version"] = SAVE_VERSION
 
 	return migrated_data
 
 
 func _has_valid_player_fields(saved_player: Dictionary) -> bool:
 	var required_fields := [
-		"name", "age", "nationality", "height_cm", "weight_kg", "preferred_foot",
+		"name", "age", "birth_year", "birth_month", "birth_day", "nationality",
+		"height_cm", "weight_kg", "preferred_foot",
 		"pace", "shooting", "passing", "dribbling", "defending", "physical", "goalkeeping",
 		"composure", "decisions", "vision", "work_rate", "determination", "positioning",
 		"potential_min", "potential_max"
@@ -136,7 +208,8 @@ func _has_valid_player_fields(saved_player: Dictionary) -> bool:
 			return false
 
 	var numeric_fields := [
-		"age", "height_cm", "weight_kg", "pace", "shooting", "passing", "dribbling",
+		"age", "birth_year", "birth_month", "birth_day", "height_cm", "weight_kg",
+		"pace", "shooting", "passing", "dribbling",
 		"defending", "physical", "goalkeeping", "composure", "decisions", "vision",
 		"work_rate", "determination", "positioning", "potential_min", "potential_max"
 	]

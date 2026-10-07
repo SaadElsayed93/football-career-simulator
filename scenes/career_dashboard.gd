@@ -3,12 +3,21 @@ extends Control
 const UNAVAILABLE := "غير متاح بعد"
 const EMPTY_STAT := "لا توجد بيانات بعد"
 const QUICK_ACTIONS := ["التدريب", "المباريات", "مسيرتي", "أهدافي", "الرسائل", "الأخبار", "الإحصائيات", "الإعدادات"]
+const ARABIC_MONTH_NAMES := [
+	"يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+	"يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+]
 
 @onready var career_content: VBoxContainer = %CareerContent
 @onready var no_career_state: Label = %NoCareerState
 @onready var player_name_label: Label = %PlayerName
 @onready var player_age_label: Label = %PlayerAge
 @onready var player_nationality_label: Label = %PlayerNationality
+@onready var career_date_label: Label = %CareerDate
+@onready var career_season_label: Label = %CareerSeason
+@onready var calendar_status_label: Label = %CalendarStatus
+@onready var next_event_title_label: Label = $MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/NextEventPanel/NextEventContent/NextEventTitle
+@onready var next_event_description_label: Label = $MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/NextEventPanel/NextEventContent/NextEventDescription
 @onready var quick_actions: HFlowContainer = $MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/QuickActionsPanel/QuickActionsContent/QuickActions
 @onready var career_status: DashboardSection = %CareerStatus
 @onready var career_snapshot: DashboardSection = %CareerSnapshot
@@ -31,6 +40,8 @@ func _ready() -> void:
 	player_nationality_label.text = nationality_name
 	_configure_sections()
 	_configure_quick_actions()
+	_refresh_calendar_display()
+	_refresh_next_event_display()
 
 
 func _configure_sections() -> void:
@@ -65,6 +76,60 @@ func _configure_quick_actions() -> void:
 		action_button.theme_type_variation = &"SecondaryButton"
 		action_button.disabled = true
 		quick_actions.add_child(action_button)
+
+
+func _refresh_calendar_display() -> void:
+	var date := SaveManager.career_time.get_current_date()
+	if date.is_empty():
+		career_date_label.text = UNAVAILABLE
+		career_season_label.text = UNAVAILABLE
+		return
+	career_date_label.text = _format_date(date)
+	career_season_label.text = SaveManager.career_time.get_season_label()
+	player_age_label.text = "%d سنة" % SaveManager.current_player.age
+
+
+func _refresh_next_event_display() -> void:
+	var event := SaveManager.career_time.get_next_event()
+	if event == null:
+		next_event_title_label.text = "لا يوجد حدث قادم حالياً"
+		next_event_description_label.text = "ستظهر هنا المواعيد والأحداث المهمة عند توفر نظامها."
+		return
+	next_event_title_label.text = event.title
+	next_event_description_label.text = "الموعد: %s" % _format_date(event.event_date)
+
+
+func _format_date(date: Dictionary) -> String:
+	if not CareerTime.is_valid_date(date):
+		return UNAVAILABLE
+	var month_index := int(date["month"]) - 1
+	return "%d %s %d" % [date["day"], ARABIC_MONTH_NAMES[month_index], date["year"]]
+
+
+func _on_advance_day_pressed() -> void:
+	var player: PlayerData = SaveManager.current_player
+	if not SaveManager.career_time.advance_one_day(player.get_birth_date()):
+		if SaveManager.career_time.get_blocking_event() != null:
+			calendar_status_label.text = "هناك حدث مهم يتطلب الانتباه قبل مواصلة الوقت."
+		elif player.age >= PlayerData.MAX_CAREER_AGE:
+			calendar_status_label.text = "وصل اللاعب إلى الحد العمري المتاح."
+		else:
+			calendar_status_label.text = "تعذر تقديم التاريخ أكثر."
+		calendar_status_label.visible = true
+		return
+
+	if not SaveManager.sync_player_age_with_career_time():
+		calendar_status_label.text = "تعذر تحديث عمر اللاعب."
+		calendar_status_label.visible = true
+		return
+
+	_refresh_calendar_display()
+	_refresh_next_event_display()
+	if SaveManager.save_game():
+		calendar_status_label.visible = false
+	else:
+		calendar_status_label.text = "تقدم التاريخ، لكن تعذر حفظ المسيرة."
+		calendar_status_label.visible = true
 
 
 func _on_back_to_menu_pressed() -> void:

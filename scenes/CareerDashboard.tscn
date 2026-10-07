@@ -140,6 +140,77 @@ layout_mode = 2
 theme_type_variation = &"SectionTitle"
 text = ""
 
+[node name="CalendarPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CalendarContent" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CalendarTitle" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent"]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "التاريخ والموسم"
+
+[node name="CalendarValues" type="GridContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="DateGroup" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarValues"]
+layout_mode = 2
+
+[node name="DateCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarValues/DateGroup"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "التاريخ"
+
+[node name="CareerDate" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarValues/DateGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryValue"
+text = ""
+
+[node name="SeasonGroup" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarValues"]
+layout_mode = 2
+
+[node name="SeasonCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarValues/SeasonGroup"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "الموسم"
+
+[node name="CareerSeason" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarValues/SeasonGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryValue"
+text = ""
+
+[node name="CalendarControls" type="HBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TestingNotice" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Caption"
+text = "أداة اختبار مؤقتة"
+
+[node name="AdvanceDayButton" type="Button" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+text = "اليوم التالي"
+
+[node name="CalendarStatus" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ErrorMessage"
+autowrap_mode = 3
+text = ""
+visible = false
+
 [node name="NextEventPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -202,3 +273,4 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [connection signal="pressed" from="MarginContainer/PageContent/TopBar/BackToMenuButton" to="." method="_on_back_to_menu_pressed"]
+[connection signal="pressed" from="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/CalendarPanel/CalendarContent/CalendarControls/AdvanceDayButton" to="." method="_on_advance_day_pressed"]

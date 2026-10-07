@@ -50,6 +50,9 @@ func _on_create_player_button_pressed() -> void:
 		return
 
 	SaveManager.current_player = player
+	if not SaveManager.begin_new_career():
+		_show_error("تعذر تهيئة زمن المسيرة.")
+		return
 	if not SaveManager.save_game():
 		_show_error("تعذر حفظ المسيرة. تحقق من مساحة التخزين وحاول مجددًا.")
 		return
