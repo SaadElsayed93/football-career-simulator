@@ -13,6 +13,8 @@ const ARABIC_MONTH_NAMES := [
 @onready var player_name_label: Label = %PlayerName
 @onready var player_age_label: Label = %PlayerAge
 @onready var player_nationality_label: Label = %PlayerNationality
+@onready var starting_club_name_label: Label = %StartingClubName
+@onready var starting_environment_intro_label: Label = %StartingEnvironmentIntroduction
 @onready var career_date_label: Label = %CareerDate
 @onready var career_season_label: Label = %CareerSeason
 @onready var calendar_status_label: Label = %CalendarStatus
@@ -38,15 +40,40 @@ func _ready() -> void:
 	player_name_label.text = player.player_name
 	player_age_label.text = "%d سنة" % player.age
 	player_nationality_label.text = nationality_name
-	_configure_sections()
+	_configure_starting_environment(player)
+	_configure_sections(player)
 	_configure_quick_actions()
 	_refresh_calendar_display()
 	_refresh_next_event_display()
 
 
-func _configure_sections() -> void:
-	career_status.configure("حالة المسيرة", [
-		{"label": "النادي الحالي", "value": UNAVAILABLE},
+func _configure_starting_environment(player: PlayerData) -> void:
+	var environment := player.current_environment
+	if environment == null or not environment.is_valid():
+		starting_club_name_label.text = UNAVAILABLE
+		starting_environment_intro_label.text = "لم يتم تحديد بيئة البداية بعد."
+		return
+	starting_club_name_label.text = environment.club.club_name
+	starting_environment_intro_label.text = "انضممت إلى %s لتبدأ مسيرتك الكروية." % environment.club.club_name
+
+
+func _configure_sections(player: PlayerData) -> void:
+	var club_name := UNAVAILABLE
+	var environment_name := UNAVAILABLE
+	var club_level_name := UNAVAILABLE
+	var development_quality_name := UNAVAILABLE
+	if player.current_environment != null and player.current_environment.is_valid():
+		var environment := player.current_environment
+		club_name = environment.club.club_name
+		environment_name = _get_environment_label(environment.environment_type)
+		club_level_name = _get_club_level_label(environment.club.club_level)
+		development_quality_name = _get_development_quality_label(environment.club.development_quality)
+
+	career_status.configure("بيئة اللاعب وحالة المسيرة", [
+		{"label": "النادي", "value": club_name},
+		{"label": "البيئة", "value": environment_name},
+		{"label": "مستوى النادي", "value": club_level_name},
+		{"label": "بيئة التطوير", "value": development_quality_name},
 		{"label": "المكانة في الفريق", "value": UNAVAILABLE},
 		{"label": "المركز", "value": UNAVAILABLE},
 		{"label": "التقييم العام", "value": UNAVAILABLE},
@@ -66,6 +93,40 @@ func _configure_sections() -> void:
 		{"label": "الجوائز", "value": EMPTY_STAT}
 	])
 	recent_events.configure("أحدث الأحداث", [], "لا توجد أحداث مسجلة بعد.")
+
+
+func _get_environment_label(environment_type: String) -> String:
+	match environment_type:
+		"local_academy":
+			return "أكاديمية محلية"
+		"youth_team":
+			return "فريق شباب"
+		"youth_section":
+			return "قطاع الناشئين"
+		"academy":
+			return "أكاديمية الناشئين"
+	return UNAVAILABLE
+
+
+func _get_club_level_label(club_level: int) -> String:
+	match club_level:
+		1:
+			return "محلي"
+		2:
+			return "إقليمي"
+		3:
+			return "متقدم"
+	return UNAVAILABLE
+
+
+func _get_development_quality_label(quality: int) -> String:
+	if quality >= 64:
+		return "قوية"
+	if quality >= 50:
+		return "جيدة"
+	if quality >= 40:
+		return "نامية"
+	return "محدودة"
 
 
 func _configure_quick_actions() -> void:

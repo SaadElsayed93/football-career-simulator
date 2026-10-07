@@ -140,6 +140,33 @@ layout_mode = 2
 theme_type_variation = &"SectionTitle"
 text = ""
 
+[node name="StartingEnvironmentPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StartingEnvironmentContent" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/StartingEnvironmentPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StartingEnvironmentCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/StartingEnvironmentPanel/StartingEnvironmentContent"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "بداية المسيرة"
+
+[node name="StartingClubName" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/StartingEnvironmentPanel/StartingEnvironmentContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = ""
+
+[node name="StartingEnvironmentIntroduction" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/StartingEnvironmentPanel/StartingEnvironmentContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 3
+text = ""
+
 [node name="CalendarPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
 layout_mode = 2
 size_flags_horizontal = 3

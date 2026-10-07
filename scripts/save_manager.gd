@@ -1,7 +1,7 @@
 extends Node
 
 const SAVE_PATH := "user://career_save.json"
-const SAVE_VERSION := 3
+const SAVE_VERSION := 4
 
 var current_player: PlayerData
 var career_time: CareerTime = CareerTime.new()
@@ -42,6 +42,9 @@ func save_game() -> bool:
 	if not sync_player_age_with_career_time() or not current_player.is_valid():
 		push_error("Cannot save invalid player data.")
 		return false
+	if current_player.current_environment == null or not current_player.current_environment.is_valid():
+		push_error("Cannot save a player without a valid starting environment.")
+		return false
 
 	var save_data := {
 		"game_version": SAVE_VERSION,
@@ -52,6 +55,7 @@ func save_game() -> bool:
 			"birth_year": current_player.birth_year,
 			"birth_month": current_player.birth_month,
 			"birth_day": current_player.birth_day,
+			"current_environment": current_player.current_environment.to_save_data(),
 			"nationality": current_player.nationality,
 			"height_cm": current_player.height_cm,
 			"weight_kg": current_player.weight_kg,
@@ -149,6 +153,25 @@ func load_game() -> bool:
 		return false
 	loaded_player.age = loaded_age
 
+	var source_version := int(migrated_data.get("_source_version", SAVE_VERSION))
+	if saved_player.has("current_environment"):
+		var saved_environment: Variant = saved_player["current_environment"]
+		if typeof(saved_environment) != TYPE_DICTIONARY:
+			return false
+		loaded_player.current_environment = CareerEnvironment.from_save_data(saved_environment)
+		if loaded_player.current_environment == null:
+			return false
+	else:
+		if source_version >= SAVE_VERSION:
+			return false
+		var environment_generator := StartingEnvironmentGenerator.new()
+		var legacy_seed := StartingEnvironmentGenerator.legacy_seed_for_player(loaded_player)
+		loaded_player.current_environment = environment_generator.generate_for_player(loaded_player, legacy_seed)
+		if loaded_player.current_environment == null:
+			return false
+	if not loaded_player.is_valid():
+		return false
+
 	current_player = loaded_player
 	career_time = loaded_career_time
 	return true
@@ -186,6 +209,7 @@ func _migrate_save_data(data: Dictionary) -> Dictionary:
 			return {}
 		migrated_data["career_time"] = default_career_time.to_save_data()
 
+	migrated_data["_source_version"] = version_number
 	migrated_data["game_version"] = SAVE_VERSION
 
 	return migrated_data

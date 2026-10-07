@@ -6,6 +6,7 @@ extends Control
 @onready var error_label: Label = %ErrorLabel
 
 var player_generator := PlayerGenerator.new()
+var starting_environment_generator := StartingEnvironmentGenerator.new()
 
 
 func _ready() -> void:
@@ -47,6 +48,10 @@ func _on_create_player_button_pressed() -> void:
 	var player: PlayerData = player_generator.generate_player(player_name, age, nationality_value)
 	if player == null or not player.is_valid():
 		_show_error("تعذر إنشاء بيانات اللاعب. تحقق من المعلومات وحاول مرة أخرى.")
+		return
+	player.current_environment = starting_environment_generator.generate_for_player(player)
+	if player.current_environment == null:
+		_show_error("تعذر تحديد بيئة البداية. حاول مرة أخرى.")
 		return
 
 	SaveManager.current_player = player

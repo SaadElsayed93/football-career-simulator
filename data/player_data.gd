@@ -10,6 +10,7 @@ const MAX_CAREER_AGE := 100
 @export var birth_year: int = 0
 @export_range(0, 12) var birth_month: int = 0
 @export_range(0, 31) var birth_day: int = 0
+@export var current_environment: CareerEnvironment
 @export var nationality: String = ""
 @export var height_cm: int = 175
 @export var weight_kg: int = 70
@@ -39,6 +40,8 @@ func is_valid() -> bool:
 	if age < MIN_CREATION_AGE or age > MAX_CAREER_AGE:
 		return false
 	if not _is_birth_date_valid():
+		return false
+	if current_environment != null and not current_environment.is_valid():
 		return false
 	if nationality.strip_edges().is_empty():
 		return false
