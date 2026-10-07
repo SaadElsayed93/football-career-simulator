@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/dashboard_section.gd" id="1_section"]
+
+[node name="DashboardSection" type="PanelContainer"]
+layout_mode = 2
+script = ExtResource("1_section")
+
+[node name="SectionContent" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SectionTitle" type="Label" parent="SectionContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+
+[node name="SectionSeparator" type="HSeparator" parent="SectionContent"]
+layout_mode = 2
+
+[node name="EntryGrid" type="GridContainer" parent="SectionContent"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="EmptyState" type="Label" parent="SectionContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 3
+visible = false

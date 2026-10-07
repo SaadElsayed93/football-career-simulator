@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://bkweu35slomke"]
+[gd_scene load_steps=4 format=3 uid="uid://bkweu35slomke"]
 
 [ext_resource type="Script" path="res://scenes/career_dashboard.gd" id="1_dashboard"]
 [ext_resource type="PackedScene" path="res://ui/screen_backdrop.tscn" id="2_backdrop"]
+[ext_resource type="PackedScene" path="res://ui/dashboard_section.tscn" id="3_section"]
 
 [node name="CareerDashboard" type="Control" unique_id=960261937]
 layout_mode = 3
@@ -20,78 +21,184 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = 40.0
-offset_right = -40.0
-offset_bottom = -40.0
+offset_left = 28.0
+offset_top = 24.0
+offset_right = -28.0
+offset_bottom = -24.0
 
 [node name="PageContent" type="VBoxContainer" parent="MarginContainer" unique_id=1703140404]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
+size_flags_vertical = 3
 
-[node name="PageTitle" type="Label" parent="MarginContainer/PageContent" unique_id=1703140405]
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer/PageContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TopBarSpacer" type="Control" parent="MarginContainer/PageContent/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackToMenuButton" type="Button" parent="MarginContainer/PageContent/TopBar"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+text = "القائمة الرئيسية"
+
+[node name="DashboardScroll" type="ScrollContainer" parent="MarginContainer/PageContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DashboardContent" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PageHeading" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent"]
+layout_mode = 2
+
+[node name="PageTitle" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/PageHeading"]
 layout_mode = 2
 theme_type_variation = &"PageTitle"
 text = "لوحة المسيرة"
 
-[node name="PageSubtitle" type="Label" parent="MarginContainer/PageContent" unique_id=1703140406]
+[node name="PageSubtitle" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/PageHeading"]
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
+text = "نظرة عامة على مسيرتك الكروية"
+
+[node name="NoCareerState" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text = "لا توجد مسيرة نشطة حالياً. ابدأ مسيرة جديدة أو تابع مسيرة محفوظة من القائمة الرئيسية."
+visible = false
+
+[node name="CareerContent" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerDetails" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ProfileCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails"]
+layout_mode = 2
+theme_type_variation = &"Caption"
 text = "ملف اللاعب"
 
-[node name="PlayerPanel" type="PanelContainer" parent="MarginContainer/PageContent" unique_id=1703140407]
-visible = false
-custom_minimum_size = Vector2(640, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerDetails" type="VBoxContainer" parent="MarginContainer/PageContent/PlayerPanel" unique_id=1703140408]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails" unique_id=1703140409]
+[node name="PlayerName" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"PrimaryValue"
 text = ""
 
-[node name="MetaSeparator" type="HSeparator" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails" unique_id=1703140410]
+[node name="ProfileSeparator" type="HSeparator" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails"]
 layout_mode = 2
 
-[node name="PlayerMeta" type="HBoxContainer" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails" unique_id=1703140411]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="AgeGroup" type="VBoxContainer" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta" unique_id=1703140412]
+[node name="PlayerMeta" type="GridContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails"]
 layout_mode = 2
 size_flags_horizontal = 3
+columns = 2
 
-[node name="AgeCaption" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta/AgeGroup" unique_id=1703140413]
+[node name="AgeGroup" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails/PlayerMeta"]
+layout_mode = 2
+
+[node name="AgeCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails/PlayerMeta/AgeGroup"]
 layout_mode = 2
 theme_type_variation = &"Caption"
 text = "العمر"
 
-[node name="PlayerAge" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta/AgeGroup" unique_id=1703140414]
+[node name="PlayerAge" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails/PlayerMeta/AgeGroup"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SectionTitle"
 text = ""
 
-[node name="NationalityGroup" type="VBoxContainer" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta" unique_id=1703140415]
+[node name="NationalityGroup" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails/PlayerMeta"]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="NationalityCaption" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta/NationalityGroup" unique_id=1703140416]
+[node name="NationalityCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails/PlayerMeta/NationalityGroup"]
 layout_mode = 2
 theme_type_variation = &"Caption"
 text = "الجنسية"
 
-[node name="PlayerNationality" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta/NationalityGroup" unique_id=1703140417]
+[node name="PlayerNationality" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PlayerPanel/PlayerDetails/PlayerMeta/NationalityGroup"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SectionTitle"
 text = ""
 
-[node name="EmptyState" type="Label" parent="MarginContainer/PageContent" unique_id=1544079925]
+[node name="NextEventPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NextEventContent" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/NextEventPanel"]
+layout_mode = 2
+
+[node name="NextEventCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/NextEventPanel/NextEventContent"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "الحدث القادم"
+
+[node name="NextEventTitle" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/NextEventPanel/NextEventContent"]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "لا يوجد حدث قادم حالياً"
+
+[node name="NextEventDescription" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/NextEventPanel/NextEventContent"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
-text = "لا توجد مسيرة نشطة."
-visible = false
+autowrap_mode = 3
+text = "ستظهر هنا المواعيد والأحداث المهمة عند توفر نظامها."
+
+[node name="QuickActionsPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="QuickActionsContent" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/QuickActionsPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="QuickActionsTitle" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/QuickActionsPanel/QuickActionsContent"]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "الوصول السريع"
+
+[node name="QuickActionsHint" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/QuickActionsPanel/QuickActionsContent"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "تتوفر هذه الأقسام عند اكتمال أنظمتها."
+
+[node name="QuickActions" type="HFlowContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/QuickActionsPanel/QuickActionsContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CareerStatus" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent" instance=ExtResource("3_section")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CareerSnapshot" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent" instance=ExtResource("3_section")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RecentEvents" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent" instance=ExtResource("3_section")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[connection signal="pressed" from="MarginContainer/PageContent/TopBar/BackToMenuButton" to="." method="_on_back_to_menu_pressed"]
