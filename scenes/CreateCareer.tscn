@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://bi8nfrprk7od0"]
+
+[ext_resource type="Script" uid="uid://cv4r861ck6pmq" path="res://scenes/create_career.gd" id="1_u432y"]
+
+[node name="CreateCareer" type="Control" unique_id=565128471]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_u432y")
+
+[node name="Create Your Player" type="Label" parent="." unique_id=445481725]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 100.0
+offset_right = 657.0
+offset_bottom = 123.0
+theme_override_font_sizes/font_size = 26
+text = "Create Your Player"
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=627985256]
+layout_mode = 0
+offset_left = 451.0
+offset_top = 164.0
+offset_right = 682.0
+offset_bottom = 208.0
+theme_override_font_sizes/font_size = 20
+placeholder_text = "Enter your name"
+
+[node name="OptionButton" type="OptionButton" parent="." unique_id=1385073432]
+layout_mode = 0
+offset_left = 475.0
+offset_top = 249.0
+offset_right = 648.0
+offset_bottom = 293.0
+
+[node name="SpinBox" type="SpinBox" parent="." unique_id=2083297811]
+layout_mode = 0
+offset_left = 539.0
+offset_top = 319.0
+offset_right = 625.5
+offset_bottom = 350.0
+min_value = 14.0
+max_value = 16.0
+value = 14.0
+
+[node name="CreatePlayerButton" type="Button" parent="." unique_id=1270242931]
+layout_mode = 0
+offset_left = 439.0
+offset_top = 500.0
+offset_right = 662.0
+offset_bottom = 551.0
+text = "Create Player"
+
+[connection signal="pressed" from="CreatePlayerButton" to="." method="_on_create_player_button_pressed"]

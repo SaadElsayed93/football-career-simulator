@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://de7cp47ci1q61"]
+
+[ext_resource type="Script" uid="uid://dxkjfv2gyd5w8" path="res://scenes/main.gd" id="1_o5qli"]
+
+[node name="Main" type="Control" unique_id=1923884270]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o5qli")
+
+[node name="Label" type="Label" parent="." unique_id=729438918]
+layout_mode = 0
+offset_left = -203.0
+offset_top = -250.0
+offset_right = 367.0
+offset_bottom = -186.0
+theme_override_font_sizes/font_size = 46
+text = "Football Career Simulator"
+
+[node name="Continue Career" type="Button" parent="." unique_id=1005036132]
+layout_mode = 0
+offset_left = -61.0
+offset_top = -160.0
+offset_right = 189.0
+offset_bottom = -100.0
+theme_override_font_sizes/font_size = 28
+text = "Continue Career"
+
+[node name="Start New Career" type="Button" parent="." unique_id=1411881096]
+layout_mode = 0
+offset_left = -61.0
+offset_top = -70.0
+offset_right = 189.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 28
+text = "Start New Career"
+
+[node name="Import Career" type="Button" parent="." unique_id=750971788]
+layout_mode = 0
+offset_left = -61.0
+offset_top = 20.0
+offset_right = 189.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 28
+text = "Import Career"
+
+[node name="Settings" type="Button" parent="." unique_id=1114587211]
+layout_mode = 0
+offset_left = -61.0
+offset_top = 110.0
+offset_right = 189.0
+offset_bottom = 170.0
+theme_override_font_sizes/font_size = 28
+text = "Settings"
+
+[node name="Exit" type="Button" parent="." unique_id=921143668]
+layout_mode = 0
+offset_left = -61.0
+offset_top = 200.0
+offset_right = 189.0
+offset_bottom = 260.0
+theme_override_font_sizes/font_size = 28
+text = "Exit"
+
+[connection signal="pressed" from="Continue Career" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Start New Career" to="." method="_on_start_new_career_pressed"]
+[connection signal="pressed" from="Import Career" to="." method="_on_import_career_pressed"]
+[connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]

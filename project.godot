@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="Football Career Simulator"
+run/main_scene="uid://de7cp47ci1q61"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+SaveManager="*uid://dyo3o2ablwpfv"
 
 [display]
 
