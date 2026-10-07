@@ -24,6 +24,10 @@ SaveManager="*uid://dyo3o2ablwpfv"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[gui]
+
+theme/custom="res://ui/game_theme.tres"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

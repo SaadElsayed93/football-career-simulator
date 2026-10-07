@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://bkweu35slomke"]
 
+[ext_resource type="Script" path="res://scenes/career_dashboard.gd" id="1_dashboard"]
+[ext_resource type="PackedScene" path="res://ui/screen_backdrop.tscn" id="2_backdrop"]
+
 [node name="CareerDashboard" type="Control" unique_id=960261937]
 layout_mode = 3
 anchors_preset = 15
@@ -7,10 +10,88 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+layout_direction = 2
+script = ExtResource("1_dashboard")
 
-[node name="Label" type="Label" parent="." unique_id=1083233112]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Career Dashboard
-"
+[node name="ScreenBackdrop" parent="." instance=ExtResource("2_backdrop")]
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1703140403]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = -40.0
+
+[node name="PageContent" type="VBoxContainer" parent="MarginContainer" unique_id=1703140404]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="PageTitle" type="Label" parent="MarginContainer/PageContent" unique_id=1703140405]
+layout_mode = 2
+theme_type_variation = &"PageTitle"
+text = "لوحة المسيرة"
+
+[node name="PageSubtitle" type="Label" parent="MarginContainer/PageContent" unique_id=1703140406]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "ملف اللاعب"
+
+[node name="PlayerPanel" type="PanelContainer" parent="MarginContainer/PageContent" unique_id=1703140407]
+visible = false
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerDetails" type="VBoxContainer" parent="MarginContainer/PageContent/PlayerPanel" unique_id=1703140408]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails" unique_id=1703140409]
+layout_mode = 2
+theme_type_variation = &"PrimaryValue"
+text = ""
+
+[node name="MetaSeparator" type="HSeparator" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails" unique_id=1703140410]
+layout_mode = 2
+
+[node name="PlayerMeta" type="HBoxContainer" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails" unique_id=1703140411]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AgeGroup" type="VBoxContainer" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta" unique_id=1703140412]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AgeCaption" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta/AgeGroup" unique_id=1703140413]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "العمر"
+
+[node name="PlayerAge" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta/AgeGroup" unique_id=1703140414]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = ""
+
+[node name="NationalityGroup" type="VBoxContainer" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta" unique_id=1703140415]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NationalityCaption" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta/NationalityGroup" unique_id=1703140416]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "الجنسية"
+
+[node name="PlayerNationality" type="Label" parent="MarginContainer/PageContent/PlayerPanel/PlayerDetails/PlayerMeta/NationalityGroup" unique_id=1703140417]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = ""
+
+[node name="EmptyState" type="Label" parent="MarginContainer/PageContent" unique_id=1544079925]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "لا توجد مسيرة نشطة."
+visible = false

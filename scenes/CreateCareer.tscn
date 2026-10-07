@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bi8nfrprk7od0"]
 
 [ext_resource type="Script" uid="uid://cv4r861ck6pmq" path="res://scenes/create_career.gd" id="1_u432y"]
+[ext_resource type="PackedScene" path="res://ui/screen_backdrop.tscn" id="2_backdrop"]
 
 [node name="CreateCareer" type="Control" unique_id=565128471]
 layout_mode = 3
@@ -9,49 +10,106 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+layout_direction = 2
 script = ExtResource("1_u432y")
 
-[node name="Create Your Player" type="Label" parent="." unique_id=445481725]
-layout_mode = 0
-offset_left = 450.0
-offset_top = 100.0
-offset_right = 657.0
-offset_bottom = 123.0
-theme_override_font_sizes/font_size = 26
-text = "Create Your Player"
+[node name="ScreenBackdrop" parent="." instance=ExtResource("2_backdrop")]
 
-[node name="LineEdit" type="LineEdit" parent="." unique_id=627985256]
-layout_mode = 0
-offset_left = 451.0
-offset_top = 164.0
-offset_right = 682.0
-offset_bottom = 208.0
-theme_override_font_sizes/font_size = 20
-placeholder_text = "Enter your name"
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1703140303]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
 
-[node name="OptionButton" type="OptionButton" parent="." unique_id=1385073432]
-layout_mode = 0
-offset_left = 475.0
-offset_top = 249.0
-offset_right = 648.0
-offset_bottom = 293.0
+[node name="CreationPanel" type="PanelContainer" parent="CenterContainer" unique_id=1703140304]
+layout_mode = 2
+custom_minimum_size = Vector2(560, 0)
 
-[node name="SpinBox" type="SpinBox" parent="." unique_id=2083297811]
-layout_mode = 0
-offset_left = 539.0
-offset_top = 319.0
-offset_right = 625.5
-offset_bottom = 350.0
+[node name="FormContent" type="VBoxContainer" parent="CenterContainer/CreationPanel" unique_id=1703140305]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PageTitle" type="Label" parent="CenterContainer/CreationPanel/FormContent" unique_id=1703140306]
+layout_mode = 2
+theme_type_variation = &"PageTitle"
+horizontal_alignment = 2
+text = "إنشاء لاعب جديد"
+
+[node name="PageSubtitle" type="Label" parent="CenterContainer/CreationPanel/FormContent" unique_id=1703140307]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+horizontal_alignment = 2
+text = "ابدأ بتعريف لاعبك واختر بياناته الأساسية"
+
+[node name="NameField" type="VBoxContainer" parent="CenterContainer/CreationPanel/FormContent" unique_id=1703140308]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="CenterContainer/CreationPanel/FormContent/NameField" unique_id=1544079921]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "اسم اللاعب"
+
+[node name="LineEdit" type="LineEdit" parent="CenterContainer/CreationPanel/FormContent/NameField" unique_id=627985256]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "أدخل اسم اللاعب"
+
+[node name="NationalityField" type="VBoxContainer" parent="CenterContainer/CreationPanel/FormContent" unique_id=1703140309]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NationalityLabel" type="Label" parent="CenterContainer/CreationPanel/FormContent/NationalityField" unique_id=1544079922]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "الجنسية"
+
+[node name="OptionButton" type="OptionButton" parent="CenterContainer/CreationPanel/FormContent/NationalityField" unique_id=1385073432]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AgeField" type="VBoxContainer" parent="CenterContainer/CreationPanel/FormContent" unique_id=1703140310]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AgeLabel" type="Label" parent="CenterContainer/CreationPanel/FormContent/AgeField" unique_id=1544079923]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "العمر"
+
+[node name="SpinBox" type="SpinBox" parent="CenterContainer/CreationPanel/FormContent/AgeField" unique_id=2083297811]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
 min_value = 14.0
 max_value = 16.0
+step = 1.0
 value = 14.0
+suffix = " سنة"
 
-[node name="CreatePlayerButton" type="Button" parent="." unique_id=1270242931]
-layout_mode = 0
-offset_left = 439.0
-offset_top = 500.0
-offset_right = 662.0
-offset_bottom = 551.0
-text = "Create Player"
+[node name="ErrorLabel" type="Label" parent="CenterContainer/CreationPanel/FormContent" unique_id=1544079924]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_type_variation = &"ErrorMessage"
+horizontal_alignment = 2
+autowrap_mode = 3
+text = ""
+visible = false
 
-[connection signal="pressed" from="CreatePlayerButton" to="." method="_on_create_player_button_pressed"]
+[node name="CreatePlayerButton" type="Button" parent="CenterContainer/CreationPanel/FormContent" unique_id=1270242931]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "إنشاء اللاعب"
+
+[connection signal="pressed" from="CenterContainer/CreationPanel/FormContent/CreatePlayerButton" to="." method="_on_create_player_button_pressed"]
