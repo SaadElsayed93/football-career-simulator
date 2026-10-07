@@ -13,7 +13,9 @@ grow_vertical = 2
 layout_direction = 2
 script = ExtResource("1_u432y")
 
-[node name="ScreenBackdrop" parent="." instance=ExtResource("2_backdrop")]
+[node name="ScreenBackdrop" parent="." unique_id=44333788 instance=ExtResource("2_backdrop")]
+layout_mode = 0
+anchors_preset = 0
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1703140303]
 layout_mode = 1
@@ -24,10 +26,12 @@ offset_left = 24.0
 offset_top = 24.0
 offset_right = -24.0
 offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="CreationPanel" type="PanelContainer" parent="CenterContainer" unique_id=1703140304]
-layout_mode = 2
 custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
 
 [node name="FormContent" type="VBoxContainer" parent="CenterContainer/CreationPanel" unique_id=1703140305]
 layout_mode = 2
@@ -36,14 +40,14 @@ size_flags_horizontal = 3
 [node name="PageTitle" type="Label" parent="CenterContainer/CreationPanel/FormContent" unique_id=1703140306]
 layout_mode = 2
 theme_type_variation = &"PageTitle"
-horizontal_alignment = 2
 text = "إنشاء لاعب جديد"
+horizontal_alignment = 2
 
 [node name="PageSubtitle" type="Label" parent="CenterContainer/CreationPanel/FormContent" unique_id=1703140307]
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
-horizontal_alignment = 2
 text = "ابدأ بتعريف لاعبك واختر بياناته الأساسية"
+horizontal_alignment = 2
 
 [node name="NameField" type="VBoxContainer" parent="CenterContainer/CreationPanel/FormContent" unique_id=1703140308]
 layout_mode = 2
@@ -92,19 +96,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 14.0
 max_value = 16.0
-step = 1.0
 value = 14.0
 suffix = " سنة"
 
 [node name="ErrorLabel" type="Label" parent="CenterContainer/CreationPanel/FormContent" unique_id=1544079924]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 theme_type_variation = &"ErrorMessage"
 horizontal_alignment = 2
 autowrap_mode = 3
-text = ""
-visible = false
 
 [node name="CreatePlayerButton" type="Button" parent="CenterContainer/CreationPanel/FormContent" unique_id=1270242931]
 custom_minimum_size = Vector2(0, 54)

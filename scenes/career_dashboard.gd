@@ -15,6 +15,9 @@ const ARABIC_MONTH_NAMES := [
 @onready var player_nationality_label: Label = %PlayerNationality
 @onready var starting_club_name_label: Label = %StartingClubName
 @onready var starting_environment_intro_label: Label = %StartingEnvironmentIntroduction
+@onready var primary_position_label: Label = %PrimaryPosition
+@onready var position_rows: VBoxContainer = %PositionRows
+@onready var squad_status_label: Label = %SquadStatus
 @onready var career_date_label: Label = %CareerDate
 @onready var career_season_label: Label = %CareerSeason
 @onready var calendar_status_label: Label = %CalendarStatus
@@ -41,8 +44,11 @@ func _ready() -> void:
 	player_name_label.text = player.player_name
 	player_age_label.text = "%d سنة" % player.age
 	player_nationality_label.text = nationality_name
+	var position_profile := PositionEvaluator.evaluate(player)
+	var selection_profile := SelectionSystem.evaluate(player, position_profile)
 	_configure_starting_environment(player)
-	_configure_sections(player)
+	_configure_position_profile(position_profile, selection_profile)
+	_configure_sections(player, position_profile, selection_profile)
 	_configure_quick_actions()
 	_refresh_calendar_display()
 	_refresh_next_event_display()
@@ -58,25 +64,66 @@ func _configure_starting_environment(player: PlayerData) -> void:
 	starting_environment_intro_label.text = "انضممت إلى %s لتبدأ مسيرتك الكروية." % environment.club.club_name
 
 
-func _configure_sections(player: PlayerData) -> void:
+func _configure_position_profile(position_profile: Dictionary, selection_profile: Dictionary) -> void:
+	var primary_position := str(position_profile.get("primary_position", ""))
+	primary_position_label.text = (
+		PositionLabels.get_position_name(primary_position)
+		if not primary_position.is_empty()
+		else "لم يتحدد المركز بعد"
+	)
+	squad_status_label.text = PositionLabels.get_squad_status_name(str(selection_profile.get("status", "not_selected")))
+
+	var ranked_positions: Array = position_profile.get("ranked_positions", [])
+	for index in range(mini(3, ranked_positions.size())):
+		var ranked_position: Dictionary = ranked_positions[index]
+		var row := HBoxContainer.new()
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		var position_name := Label.new()
+		position_name.text = PositionLabels.get_position_name(ranked_position["position_id"])
+		position_name.custom_minimum_size = Vector2(144, 0)
+		position_name.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		row.add_child(position_name)
+
+		var suitability_bar := ProgressBar.new()
+		suitability_bar.min_value = 0.0
+		suitability_bar.max_value = 100.0
+		suitability_bar.value = float(ranked_position["suitability"])
+		suitability_bar.show_percentage = false
+		suitability_bar.custom_minimum_size = Vector2(0, 18)
+		suitability_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(suitability_bar)
+		position_rows.add_child(row)
+
+
+func _configure_sections(
+	player: PlayerData,
+	position_profile: Dictionary,
+	selection_profile: Dictionary
+) -> void:
 	var club_name := UNAVAILABLE
 	var environment_name := UNAVAILABLE
 	var club_level_name := UNAVAILABLE
 	var development_quality_name := UNAVAILABLE
+	var current_position_name := "لم يتحدد المركز بعد"
+	var squad_status_name := PositionLabels.get_squad_status_name(str(selection_profile.get("status", "not_selected")))
 	if player.current_environment != null and player.current_environment.is_valid():
 		var environment := player.current_environment
 		club_name = environment.club.club_name
 		environment_name = _get_environment_label(environment.environment_type)
 		club_level_name = _get_club_level_label(environment.club.club_level)
 		development_quality_name = _get_development_quality_label(environment.club.development_quality)
+	var primary_position := str(position_profile.get("primary_position", ""))
+	if not primary_position.is_empty():
+		current_position_name = PositionLabels.get_position_name(primary_position)
 
 	career_status.configure("بيئة اللاعب وحالة المسيرة", [
 		{"label": "النادي", "value": club_name},
 		{"label": "البيئة", "value": environment_name},
 		{"label": "مستوى النادي", "value": club_level_name},
 		{"label": "بيئة التطوير", "value": development_quality_name},
-		{"label": "المكانة في الفريق", "value": UNAVAILABLE},
-		{"label": "المركز", "value": UNAVAILABLE},
+		{"label": "حالة الفريق", "value": squad_status_name},
+		{"label": "المركز الحالي", "value": current_position_name},
 		{"label": "التقييم العام", "value": UNAVAILABLE},
 		{"label": "الحالة الفنية", "value": UNAVAILABLE},
 		{"label": "اللياقة البدنية", "value": UNAVAILABLE},

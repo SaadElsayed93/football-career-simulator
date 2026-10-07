@@ -1,7 +1,6 @@
 extends Node
 
 const SAVE_PATH := "user://career_save.json"
-const SAVE_VERSION := 4
 const SAVE_VERSION := 5
 
 var current_player: PlayerData
@@ -110,16 +109,6 @@ func save_game() -> bool:
 
 
 func load_game() -> bool:
-		loaded_player.training_focus = saved_player["training_focus"]
-		var saved_development_event: Variant = saved_player["last_development_event"]
-		if typeof(saved_development_event) == TYPE_DICTIONARY and not saved_development_event.is_empty():
-			loaded_player.last_development_event = DevelopmentEvent.from_save_data(saved_development_event)
-			if loaded_player.last_development_event == null:
-				return false
-		if not loaded_player.training_focus.is_empty() and not TrainingSystem.is_valid_focus(loaded_player.training_focus):
-			return false
-		if loaded_player.last_development_event != null and not TrainingSystem.is_valid_result(loaded_player.last_development_event):
-			return false
 	if not FileAccess.file_exists(SAVE_PATH):
 		return false
 
@@ -143,6 +132,16 @@ func load_game() -> bool:
 	loaded_player.birth_year = int(saved_player["birth_year"])
 	loaded_player.birth_month = int(saved_player["birth_month"])
 	loaded_player.birth_day = int(saved_player["birth_day"])
+	loaded_player.training_focus = saved_player["training_focus"]
+	var saved_development_event: Variant = saved_player["last_development_event"]
+	if typeof(saved_development_event) == TYPE_DICTIONARY and not saved_development_event.is_empty():
+		loaded_player.last_development_event = DevelopmentEvent.from_save_data(saved_development_event)
+		if loaded_player.last_development_event == null:
+			return false
+	if not loaded_player.training_focus.is_empty() and not TrainingSystem.is_valid_focus(loaded_player.training_focus):
+		return false
+	if loaded_player.last_development_event != null and not TrainingSystem.is_valid_result(loaded_player.last_development_event):
+		return false
 	loaded_player.nationality = saved_player["nationality"]
 	loaded_player.height_cm = int(saved_player["height_cm"])
 	loaded_player.weight_kg = int(saved_player["weight_kg"])

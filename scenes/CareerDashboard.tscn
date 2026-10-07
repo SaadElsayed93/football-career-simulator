@@ -167,6 +167,57 @@ theme_type_variation = &"MutedLabel"
 autowrap_mode = 3
 text = ""
 
+[node name="PositionProfilePanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PositionProfileContent" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PositionProfileTitle" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel/PositionProfileContent"]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "ملف المراكز"
+
+[node name="PrimaryPositionCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel/PositionProfileContent"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "المركز الحالي"
+
+[node name="PrimaryPosition" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel/PositionProfileContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "لم يتحدد المركز بعد"
+
+[node name="TopPositionsCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel/PositionProfileContent"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "أقوى المراكز"
+
+[node name="PositionRows" type="VBoxContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel/PositionProfileContent"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SquadStatusCaption" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel/PositionProfileContent"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "تقدير حالة الفريق"
+
+[node name="SquadStatus" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel/PositionProfileContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "غير محددة"
+
+[node name="SelectionDisclaimer" type="Label" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/PositionProfilePanel/PositionProfileContent"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+autowrap_mode = 3
+text = "تقدير مبدئي دون تشكيل فريق فعلي."
+
 [node name="CalendarPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
 layout_mode = 2
 size_flags_horizontal = 3
