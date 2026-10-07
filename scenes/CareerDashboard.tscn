@@ -238,6 +238,11 @@ autowrap_mode = 3
 text = ""
 visible = false
 
+[node name="DevelopmentSnapshot" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent" instance=ExtResource("3_section")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="NextEventPanel" type="PanelContainer" parent="MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent"]
 layout_mode = 2
 size_flags_horizontal = 3

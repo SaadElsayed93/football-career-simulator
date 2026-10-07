@@ -2,6 +2,7 @@ extends Node
 
 const SAVE_PATH := "user://career_save.json"
 const SAVE_VERSION := 4
+const SAVE_VERSION := 5
 
 var current_player: PlayerData
 var career_time: CareerTime = CareerTime.new()
@@ -45,6 +46,15 @@ func save_game() -> bool:
 	if current_player.current_environment == null or not current_player.current_environment.is_valid():
 		push_error("Cannot save a player without a valid starting environment.")
 		return false
+	if not current_player.training_focus.is_empty() and not TrainingSystem.is_valid_focus(current_player.training_focus):
+		push_error("Cannot save an invalid training focus.")
+		return false
+	if (
+		current_player.last_development_event != null
+		and not TrainingSystem.is_valid_result(current_player.last_development_event)
+	):
+		push_error("Cannot save an invalid development result.")
+		return false
 
 	var save_data := {
 		"game_version": SAVE_VERSION,
@@ -56,6 +66,12 @@ func save_game() -> bool:
 			"birth_month": current_player.birth_month,
 			"birth_day": current_player.birth_day,
 			"current_environment": current_player.current_environment.to_save_data(),
+			"training_focus": current_player.training_focus,
+			"last_development_event": (
+				current_player.last_development_event.to_save_data()
+				if current_player.last_development_event != null
+				else {}
+			),
 			"nationality": current_player.nationality,
 			"height_cm": current_player.height_cm,
 			"weight_kg": current_player.weight_kg,
@@ -94,6 +110,16 @@ func save_game() -> bool:
 
 
 func load_game() -> bool:
+		loaded_player.training_focus = saved_player["training_focus"]
+		var saved_development_event: Variant = saved_player["last_development_event"]
+		if typeof(saved_development_event) == TYPE_DICTIONARY and not saved_development_event.is_empty():
+			loaded_player.last_development_event = DevelopmentEvent.from_save_data(saved_development_event)
+			if loaded_player.last_development_event == null:
+				return false
+		if not loaded_player.training_focus.is_empty() and not TrainingSystem.is_valid_focus(loaded_player.training_focus):
+			return false
+		if loaded_player.last_development_event != null and not TrainingSystem.is_valid_result(loaded_player.last_development_event):
+			return false
 	if not FileAccess.file_exists(SAVE_PATH):
 		return false
 
@@ -208,6 +234,12 @@ func _migrate_save_data(data: Dictionary) -> Dictionary:
 		if not default_career_time.initialize_new_career(legacy_age):
 			return {}
 		migrated_data["career_time"] = default_career_time.to_save_data()
+	if version_number <= 4:
+		var saved_player: Variant = migrated_data.get("player")
+		if typeof(saved_player) != TYPE_DICTIONARY:
+			return {}
+		saved_player["training_focus"] = ""
+		saved_player["last_development_event"] = {}
 
 	migrated_data["_source_version"] = version_number
 	migrated_data["game_version"] = SAVE_VERSION
@@ -217,7 +249,8 @@ func _migrate_save_data(data: Dictionary) -> Dictionary:
 
 func _has_valid_player_fields(saved_player: Dictionary) -> bool:
 	var required_fields := [
-		"name", "age", "birth_year", "birth_month", "birth_day", "nationality",
+		"name", "age", "birth_year", "birth_month", "birth_day", "training_focus",
+		"last_development_event", "nationality",
 		"height_cm", "weight_kg", "preferred_foot",
 		"pace", "shooting", "passing", "dribbling", "defending", "physical", "goalkeeping",
 		"composure", "decisions", "vision", "work_rate", "determination", "positioning",
@@ -227,9 +260,12 @@ func _has_valid_player_fields(saved_player: Dictionary) -> bool:
 		if not saved_player.has(field):
 			return false
 
-	for field in ["name", "nationality", "preferred_foot"]:
+	for field in ["name", "nationality", "preferred_foot", "training_focus"]:
 		if typeof(saved_player[field]) != TYPE_STRING:
 			return false
+	var development_event: Variant = saved_player["last_development_event"]
+	if typeof(development_event) != TYPE_DICTIONARY and typeof(development_event) != TYPE_NIL:
+		return false
 
 	var numeric_fields := [
 		"age", "birth_year", "birth_month", "birth_day", "height_cm", "weight_kg",

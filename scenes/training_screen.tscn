@@ -1,0 +1,232 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/training_screen.gd" id="1_training"]
+[ext_resource type="PackedScene" path="res://ui/screen_backdrop.tscn" id="2_backdrop"]
+
+[node name="TrainingScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+layout_direction = 2
+script = ExtResource("1_training")
+
+[node name="ScreenBackdrop" parent="." instance=ExtResource("2_backdrop")]
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = 24.0
+offset_right = -28.0
+offset_bottom = -24.0
+
+[node name="PageContent" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer/PageContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TopBarSpacer" type="Control" parent="MarginContainer/PageContent/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackToDashboardButton" type="Button" parent="MarginContainer/PageContent/TopBar"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+text = "العودة إلى المسيرة"
+
+[node name="TrainingScroll" type="ScrollContainer" parent="MarginContainer/PageContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TrainingContent" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PageHeading" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent"]
+layout_mode = 2
+
+[node name="PageTitle" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/PageHeading"]
+layout_mode = 2
+theme_type_variation = &"PageTitle"
+text = "التدريب والتطور"
+
+[node name="PageSubtitle" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/PageHeading"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "جلسة تدريب"
+
+[node name="NoCareerState" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text = "لا توجد مسيرة نشطة حالياً."
+visible = false
+
+[node name="TrainingForm" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerSnapshotPanel" type="PanelContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerSnapshotContent" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SnapshotTitle" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent"]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "بيانات اللاعب"
+
+[node name="PlayerName" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryValue"
+text = ""
+
+[node name="SnapshotValues" type="GridContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="AgeGroup" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent/SnapshotValues"]
+layout_mode = 2
+
+[node name="AgeCaption" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent/SnapshotValues/AgeGroup"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "العمر"
+
+[node name="PlayerAge" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent/SnapshotValues/AgeGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = ""
+
+[node name="DateGroup" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent/SnapshotValues"]
+layout_mode = 2
+
+[node name="DateCaption" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent/SnapshotValues/DateGroup"]
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "تاريخ المسيرة"
+
+[node name="CareerDate" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/PlayerSnapshotPanel/PlayerSnapshotContent/SnapshotValues/DateGroup"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = ""
+
+[node name="AttributeSnapshotPanel" type="PanelContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AttributeSnapshotContent" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/AttributeSnapshotPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AttributeSnapshotTitle" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/AttributeSnapshotPanel/AttributeSnapshotContent"]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "المهارات الحالية"
+
+[node name="AttributeSnapshot" type="HFlowContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/AttributeSnapshotPanel/AttributeSnapshotContent"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FocusPanel" type="PanelContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FocusContent" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FocusTitle" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel/FocusContent"]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "التركيز التدريبي"
+
+[node name="FocusOption" type="OptionButton" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel/FocusContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CurrentAttributeLabel" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel/FocusContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Caption"
+text = "المهارة المستهدفة"
+
+[node name="CurrentAttributeValue" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel/FocusContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "غير متاح بعد"
+
+[node name="StartTrainingButton" type="Button" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel/FocusContent"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "بدء التدريب"
+disabled = true
+
+[node name="TrainingStatus" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel/FocusContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ErrorMessage"
+autowrap_mode = 3
+text = ""
+visible = false
+
+[node name="ResultPanel" type="PanelContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResultContent" type="VBoxContainer" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/ResultPanel"]
+layout_mode = 2
+
+[node name="ResultTitle" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/ResultPanel/ResultContent"]
+layout_mode = 2
+theme_type_variation = &"SectionTitle"
+text = "نتيجة آخر جلسة"
+
+[node name="ResultFeedback" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/ResultPanel/ResultContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryValue"
+autowrap_mode = 3
+text = "لا توجد جلسة تدريب مسجلة بعد."
+
+[node name="ResultDetails" type="Label" parent="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/ResultPanel/ResultContent"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 3
+text = ""
+
+[connection signal="pressed" from="MarginContainer/PageContent/TopBar/BackToDashboardButton" to="." method="_on_back_to_dashboard_pressed"]
+[connection signal="item_selected" from="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel/FocusContent/FocusOption" to="." method="_on_focus_selected"]
+[connection signal="pressed" from="MarginContainer/PageContent/TrainingScroll/TrainingContent/TrainingForm/FocusPanel/FocusContent/StartTrainingButton" to="." method="_on_start_training_pressed"]

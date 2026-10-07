@@ -23,6 +23,7 @@ const ARABIC_MONTH_NAMES := [
 @onready var quick_actions: HFlowContainer = $MarginContainer/PageContent/DashboardScroll/DashboardContent/CareerContent/QuickActionsPanel/QuickActionsContent/QuickActions
 @onready var career_status: DashboardSection = %CareerStatus
 @onready var career_snapshot: DashboardSection = %CareerSnapshot
+@onready var development_snapshot: DashboardSection = %DevelopmentSnapshot
 @onready var recent_events: DashboardSection = %RecentEvents
 
 
@@ -92,6 +93,19 @@ func _configure_sections(player: PlayerData) -> void:
 		{"label": "البطولات", "value": EMPTY_STAT},
 		{"label": "الجوائز", "value": EMPTY_STAT}
 	])
+	var current_focus := "لم يتم الاختيار بعد"
+	var last_training := EMPTY_STAT
+	var last_development := EMPTY_STAT
+	if not player.training_focus.is_empty():
+		current_focus = TrainingLabels.get_focus_name(player.training_focus)
+	if player.last_development_event != null:
+		last_training = _format_date(player.last_development_event.event_date)
+		last_development = TrainingLabels.get_result_feedback(player.last_development_event)
+	development_snapshot.configure("التطور", [
+		{"label": "التركيز الحالي", "value": current_focus},
+		{"label": "آخر تدريب", "value": last_training},
+		{"label": "آخر تطور", "value": last_development}
+	])
 	recent_events.configure("أحدث الأحداث", [], "لا توجد أحداث مسجلة بعد.")
 
 
@@ -132,10 +146,15 @@ func _get_development_quality_label(quality: int) -> String:
 func _configure_quick_actions() -> void:
 	for action_name in QUICK_ACTIONS:
 		var action_button := Button.new()
-		action_button.text = "%s\nغير متاح بعد" % action_name
 		action_button.custom_minimum_size = Vector2(164, 76)
 		action_button.theme_type_variation = &"SecondaryButton"
-		action_button.disabled = true
+		if action_name == "التدريب":
+			action_button.text = action_name
+			action_button.disabled = false
+			action_button.pressed.connect(_on_training_pressed)
+		else:
+			action_button.text = "%s\nغير متاح بعد" % action_name
+			action_button.disabled = true
 		quick_actions.add_child(action_button)
 
 
@@ -195,3 +214,7 @@ func _on_advance_day_pressed() -> void:
 
 func _on_back_to_menu_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
+
+
+func _on_training_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/training_screen.tscn")

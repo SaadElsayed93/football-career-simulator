@@ -11,6 +11,8 @@ const MAX_CAREER_AGE := 100
 @export_range(0, 12) var birth_month: int = 0
 @export_range(0, 31) var birth_day: int = 0
 @export var current_environment: CareerEnvironment
+@export var training_focus := ""
+@export var last_development_event: DevelopmentEvent
 @export var nationality: String = ""
 @export var height_cm: int = 175
 @export var weight_kg: int = 70
@@ -42,6 +44,10 @@ func is_valid() -> bool:
 	if not _is_birth_date_valid():
 		return false
 	if current_environment != null and not current_environment.is_valid():
+		return false
+	if not training_focus.is_empty() and training_focus.strip_edges().is_empty():
+		return false
+	if last_development_event != null and not last_development_event.is_valid():
 		return false
 	if nationality.strip_edges().is_empty():
 		return false
